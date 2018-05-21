@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, StatusBar } from 'react-native';
+import { StyleSheet, Text, View, StatusBar, SectionList } from 'react-native';
 
 export default class App extends React.Component {
   constructor(){
@@ -70,9 +70,13 @@ export default class App extends React.Component {
   //     console.log(this.state);
   //   });
   // }
+  _renderItem(item){
+    console.log(item);
+  }
   render() {
-    console.log(this.state);
     let price = this.state.price/100;
+    let choices = this.state.options.map((option)=>{return {titel:option.name,data:option.items}});
+    console.log(choices);
     return (
       <View style={styles.container}>
         <StatusBar hidden={true} />
@@ -80,6 +84,12 @@ export default class App extends React.Component {
           <Text style={styles.name}>{this.state.name}</Text>
           <Text style={styles.price}>{price}</Text>
         </View>
+        <SectionList
+        sections={choices}
+        renderItem={({item})=>{return <Text>{item.name}</Text>}}
+        renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>{section.title}</Text>}
+        keyExtractor={(item, index) => index}
+        />
       </View>
     );
   }
@@ -108,5 +118,11 @@ const styles = StyleSheet.create({
     right:0,
     marginRight:20,
     paddingTop:22
+  },
+  sectionHeader:{
+    fontSize: 14,
+    fontWeight: 'bold',
+    backgroundColor:'grey',
+    width:'100%'
   }
 });
