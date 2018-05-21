@@ -5,81 +5,88 @@ import { assign, find, findIndex, remove }  from 'lodash';
 export default class App extends React.Component {
   constructor(){
     super();
-    this.state = {
-      "name": "Signature Milk Tea",
-      "price": 325,
-      "options": [
-        {
-          "name": "Add On",
-          "min": 0,
-          "max": 2,
-          "chosen":[],
-          "items": [
-            {
-              "name": "bubble",
-              "price": 50,
-              "available": true,
-              "quantity":0
-            },
-            {
-              "name": "pudding",
-              "price": 50,
-              "available": true,
-              "quantity":0
-            }
-          ]
-        },
-        {
-          "name": "Tea",
-          "min": 1,
-          "max": 1,
-          "chosen":[],
-          "items": [
-            {
-              "name": "milk tea",
-              "price": 0,
-              "available": true,
-              "quantity":0
-            },
-            {
-              "name": "green milk tea",
-              "price": 0,
-              "available": true,
-              "quantity":0
-            }
-          ]
-        },
-        {
-          "name": "Size",
-          "min": 1,
-          "max": 1,
-          "chosen":[],
-          "items": [
-            {
-              "name": "Large",
-              "price": 0,
-              "available": true,
-              "quantity":0
-            },
-            {
-              "name": "Medium",
-              "price": 0,
-              "available": true,
-              "quantity":0
-            }
-          ]
-        }
-      ]
-    };
+    this.state = {};
+      // "name": "Signature Milk Tea",
+      // "price": 325,
+      // "options": [
+      //   {
+      //     "name": "Add On",
+      //     "min": 0,
+      //     "max": 2,
+      //     "chosen":[],
+      //     "items": [
+      //       {
+      //         "name": "bubble",
+      //         "price": 50,
+      //         "available": true,
+      //         "quantity":0
+      //       },
+      //       {
+      //         "name": "pudding",
+      //         "price": 50,
+      //         "available": true,
+      //         "quantity":0
+      //       }
+      //     ]
+      //   },
+      //   {
+      //     "name": "Tea",
+      //     "min": 1,
+      //     "max": 1,
+      //     "chosen":[],
+      //     "items": [
+      //       {
+      //         "name": "milk tea",
+      //         "price": 0,
+      //         "available": true,
+      //         "quantity":0
+      //       },
+      //       {
+      //         "name": "green milk tea",
+      //         "price": 0,
+      //         "available": true,
+      //         "quantity":0
+      //       }
+      //     ]
+      //   },
+      //   {
+      //     "name": "Size",
+      //     "min": 1,
+      //     "max": 1,
+      //     "chosen":[],
+      //     "items": [
+      //       {
+      //         "name": "Large",
+      //         "price": 0,
+      //         "available": true,
+      //         "quantity":0
+      //       },
+      //       {
+      //         "name": "Medium",
+      //         "price": 0,
+      //         "available": true,
+      //         "quantity":0
+      //       }
+      //     ]
+      //   }
+      // ]
+    // };
   }
-  // componentDidMount(){
-  //   fetch("https://runkit.io/milkte/ricepo-interview-endpoint/branches/master/:rest_id/menu",{method:'GET'})
-  //   .then((res)=> res.json())
-  //   .then((data)=>{
-  //     this.setState(data);
-  //     console.log(this.state);
-  //   });
-  // }
+  componentDidMount(){
+    fetch("https://runkit.io/milkte/ricepo-interview-endpoint/branches/master/:rest_id/menu",{method:'GET'})
+    .then((res)=> res.json())
+    .then((data)=>{
+      console.log(data);
+      data.options.forEach((option)=>{
+        option.chosen = [];
+        option.items.forEach((item)=>{
+          item.quantity = 0;
+        });
+      });
+      this.setState(data);
+      console.log(this.state);
+    });
+  }
   _handleSubmitCheck(){
     return()=>{
       let { options, name } = this.state;
@@ -185,32 +192,37 @@ export default class App extends React.Component {
     }
   }
   render() {
-    let price = this.state.price/100;
-    //pretreat options for sectionList
-    let choices = this.state.options.map((option)=>{
-      return {title:option.name, data:option.items, max:option.max};
-    });
-    return (
-      <View style={styles.container}>
+    if(this.state.name){
+      
+      let price = this.state.price/100;
+      //pretreat options for sectionList
+      let choices = this.state.options.map((option)=>{
+        return {title:option.name, data:option.items, max:option.max};
+      });
+      return (
+        <View style={styles.container}>
         <StatusBar hidden={true} />
         <View style={styles.header}>
-          <Text style={styles.name}>{this.state.name}</Text>
-          <TouchableOpacity 
-          style={styles.price}
-          onPress={this._handleSubmitCheck()}>
-            <Text>{price}</Text>
-          </TouchableOpacity>
+        <Text style={styles.name}>{this.state.name}</Text>
+        <TouchableOpacity 
+        style={styles.price}
+        onPress={this._handleSubmitCheck()}>
+        <Text>{price}</Text>
+        </TouchableOpacity>
         </View>
         <View style={styles.sectionList}>
-          <SectionList
-          sections={choices}
-          renderItem={this._renderItem()}
-          renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>Choose {section.title}</Text>}
-          keyExtractor={(item, index) => index}
-          />
+        <SectionList
+        sections={choices}
+        renderItem={this._renderItem()}
+        renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>Choose {section.title}</Text>}
+        keyExtractor={(item, index) => index}
+        />
         </View>
-      </View>
-    );
+        </View>
+      );
+    }else{
+      return(<View>No data</View>)
+    }
   }
 }
 
