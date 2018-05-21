@@ -93,10 +93,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   header:{
-    backgroundColor:'pink',
+    backgroundColor:'#fff4d3',
     width:'100%',
-    height:45,
-    paddingTop:10,
+    height:60,
+    paddingTop:20,
   },
   name:{
     textAlign: 'center',
@@ -107,6 +107,6 @@ const styles = StyleSheet.create({
     position:'absolute',
     right:0,
     marginRight:20,
-    paddingTop:13
+    paddingTop:22
   }
 });
