@@ -93,8 +93,7 @@ export default class App extends React.Component {
         </TouchableOpacity>
       );
     }else{
-      console.log(styles.unavailableItemList);
-      return(<View style={styles.unavailableItemList}>
+      return(<View style={[styles.itemList, styles.unavailableItemList]}>
       <Text>{item.name}</Text>
       <Text>+{showPrice}</Text>
       </View>)
@@ -171,12 +170,6 @@ const styles = StyleSheet.create({
     marginRight:10
   },
   unavailableItemList:{
-    flex:1,
-    flexDirection:'row',
-    justifyContent:'space-between',
-    marginTop:20,
-    marginLeft:10,
-    marginRight:10,
     opacity:0.2
   }
 });
