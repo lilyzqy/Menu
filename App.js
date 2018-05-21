@@ -70,20 +70,22 @@ export default class App extends React.Component {
   //     console.log(this.state);
   //   });
   // }
-  _onPress(price){
+  _onPress(addPrice){
     return ()=>{
-      
-      console.log(price);
+      let prevPrice = this.state.price;
+      let totalPrice = prevPrice + addPrice;
+      this.setState({price:totalPrice});
     }
   }
   _renderItem({item}){
-    let price = (item.price/100).toFixed(2);
+    let price = item.price
+    let showPrice = (price/100).toFixed(2);
     return (
       <TouchableOpacity
       onPress={this._onPress(price)}>
         <View style={styles.itemList}>
           <Text>{item.name}</Text>
-          <Text>+{price}</Text>
+          <Text>+{showPrice}</Text>
         </View>
       </TouchableOpacity>
     );
