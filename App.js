@@ -101,18 +101,22 @@ export default class App extends React.Component {
     return({item, section})=>{
       let title = section.title;
       let max = section.max;
-      let { price, name } = item;
+      let { price, name, quantity } = item;
       let showPrice = (price/100).toFixed(2);
       if(item.available){
         return (
-          <TouchableOpacity
-          onPress={this._onPress(title,name,max,price)}>
-          <View style={styles.itemList}
-          ref={(el)=>{this.itemTouched=el;}}>
-          <Text>{name}</Text>
-          <Text>+{showPrice}</Text>
+          <View>
+            <TouchableOpacity
+            onPress={this._onPress(title,name,max,price)}>
+              <View style={styles.itemList}>
+              <Text>{name}</Text>
+              <Text>+{showPrice}</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Text>{quantity}</Text>
+            </TouchableOpacity>
           </View>
-          </TouchableOpacity>
         );
       }else{
         return(<View style={[styles.itemList, styles.unavailableItemList]}>
@@ -127,7 +131,6 @@ export default class App extends React.Component {
     let choices = this.state.options.map((option)=>{
       return {title:option.name, data:option.items, max:option.max};
     });
-    console.log(choices);
     return (
       <View style={styles.container}>
         <StatusBar hidden={true} />
