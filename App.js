@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, StatusBar, SectionList, TouchableOpacity } from 'react-native';
-import  assign  from 'lodash/assign';
+import { assign, find, findIndex }  from 'lodash';
 
 export default class App extends React.Component {
   constructor(){
@@ -11,18 +11,21 @@ export default class App extends React.Component {
       "options": [
         {
           "name": "Add On",
-          "min": 1,
-          "max": 1,
+          "min": 0,
+          "max": 2,
+          "chosen":[],
           "items": [
             {
               "name": "bubble",
               "price": 50,
-              "available": true
+              "available": true,
+              "quantity":0
             },
             {
               "name": "pudding",
               "price": 50,
-              "available": true
+              "available": true,
+              "quantity":0
             }
           ]
         },
@@ -30,16 +33,19 @@ export default class App extends React.Component {
           "name": "Tea",
           "min": 1,
           "max": 1,
+          "chosen":[],
           "items": [
             {
               "name": "milk tea",
               "price": 0,
-              "available": true
+              "available": true,
+              "quantity":0
             },
             {
               "name": "green milk tea",
               "price": 0,
-              "available": true
+              "available": true,
+              "quantity":0
             }
           ]
         },
@@ -47,16 +53,19 @@ export default class App extends React.Component {
           "name": "Size",
           "min": 1,
           "max": 1,
+          "chosen":[],
           "items": [
             {
               "name": "Large",
               "price": 0,
-              "available": true
+              "available": true,
+              "quantity":0
             },
             {
               "name": "Medium",
               "price": 0,
-              "available": false
+              "available": true,
+              "quantity":0
             }
           ]
         }
@@ -71,39 +80,54 @@ export default class App extends React.Component {
   //     console.log(this.state);
   //   });
   // }
-  _onPress(addPrice){
+  
+  
+  _onPress(title,name,max,addPrice){
     return ()=>{
+      let {options} = this.state;
+      let index = findIndex(options,{"name":title});
+      let a = options[index];
+      a.chosen.push(name);
+      let subA = find(a.items,{name:name});
+      subA.quantity = subA.quantity + 1;
+      options[index] = a;
       let prevPrice = this.state.price;
       let totalPrice = prevPrice + addPrice;
-      this.setState({price:totalPrice});
-    }
+      this.setState({price:totalPrice,options:options});
+      console.log(this.state);
+    };
   }
-  _renderItem({item}){
-    console.log(item);
-    let price = item.price;
-    let showPrice = (price/100).toFixed(2);
-    if(item.available){
-      return (
-        <TouchableOpacity
-        onPress={this._onPress(price)}>
-        <View style={styles.itemList}>
-        <Text>{item.name}</Text>
-        <Text>+{showPrice}</Text>
-        </View>
-        </TouchableOpacity>
-      );
-    }else{
-      return(<View style={[styles.itemList, styles.unavailableItemList]}>
-      <Text>{item.name}</Text>
-      <Text>+{showPrice}</Text>
-      </View>)
+  _renderItem(){
+    return({item, section})=>{
+      let title = section.title;
+      let max = section.max;
+      let { price, name } = item;
+      let showPrice = (price/100).toFixed(2);
+      if(item.available){
+        return (
+          <TouchableOpacity
+          onPress={this._onPress(title,name,max,price)}>
+          <View style={styles.itemList}
+          ref={(el)=>{this.itemTouched=el;}}>
+          <Text>{name}</Text>
+          <Text>+{showPrice}</Text>
+          </View>
+          </TouchableOpacity>
+        );
+      }else{
+        return(<View style={[styles.itemList, styles.unavailableItemList]}>
+          <Text>{item.name}</Text>
+          <Text>+{showPrice}</Text>
+          </View>);
+        }
     }
   }
   render() {
     let price = this.state.price/100;
     let choices = this.state.options.map((option)=>{
-      return {title:option.name,data:option.items}
+      return {title:option.name, data:option.items, max:option.max};
     });
+    console.log(choices);
     return (
       <View style={styles.container}>
         <StatusBar hidden={true} />
@@ -114,7 +138,7 @@ export default class App extends React.Component {
         <View style={styles.sectionList}>
           <SectionList
           sections={choices}
-          renderItem={this._renderItem.bind(this)}
+          renderItem={this._renderItem()}
           renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>Choose {section.title}</Text>}
           keyExtractor={(item, index) => index}
           />
