@@ -70,12 +70,17 @@ export default class App extends React.Component {
   //     console.log(this.state);
   //   });
   // }
-  _renderItem(item){
-    console.log(item);
+  _renderItem({item}){
+    let price = (item.price/100).toFixed(2);
+    return (
+      <View style={styles.itemList}>
+        <Text>{item.name}</Text>
+        <Text>+{price}</Text>
+      </View>);
   }
   render() {
     let price = this.state.price/100;
-    let choices = this.state.options.map((option)=>{return {titel:option.name,data:option.items}});
+    let choices = this.state.options.map((option)=>{return {title:option.name,data:option.items}});
     console.log(choices);
     return (
       <View style={styles.container}>
@@ -84,12 +89,14 @@ export default class App extends React.Component {
           <Text style={styles.name}>{this.state.name}</Text>
           <Text style={styles.price}>{price}</Text>
         </View>
-        <SectionList
-        sections={choices}
-        renderItem={({item})=>{return <Text>{item.name}</Text>}}
-        renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>{section.title}</Text>}
-        keyExtractor={(item, index) => index}
-        />
+        <View style={styles.sectionList}>
+          <SectionList
+          sections={choices}
+          renderItem={this._renderItem}
+          renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>Choose {section.title}</Text>}
+          keyExtractor={(item, index) => index}
+          />
+        </View>
       </View>
     );
   }
@@ -105,8 +112,8 @@ const styles = StyleSheet.create({
   header:{
     backgroundColor:'#fff4d3',
     width:'100%',
-    height:60,
-    paddingTop:20,
+    height:'10%',
+    paddingTop:22,
   },
   name:{
     textAlign: 'center',
@@ -117,12 +124,26 @@ const styles = StyleSheet.create({
     position:'absolute',
     right:0,
     marginRight:20,
-    paddingTop:22
+    paddingTop:24
+  },
+  sectionList:{
+    width:'100%',
+    height:'90%',
+    paddingTop:10,
   },
   sectionHeader:{
+    textAlign:'center',
     fontSize: 14,
     fontWeight: 'bold',
-    backgroundColor:'grey',
-    width:'100%'
+    textDecorationLine:'underline',
+    width:'100%',
+    height:20
+  },
+  itemList:{
+    flex:1,
+    flexDirection:'row',
+    justifyContent:'space-between',
+    marginTop:20,
+    marginLeft:5
   }
 });
