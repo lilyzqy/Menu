@@ -6,71 +6,6 @@ export default class App extends React.Component {
   constructor(){
     super();
     this.state = {};
-      // "name": "Signature Milk Tea",
-      // "price": 325,
-      // "options": [
-      //   {
-      //     "name": "Add On",
-      //     "min": 0,
-      //     "max": 2,
-      //     "chosen":[],
-      //     "items": [
-      //       {
-      //         "name": "bubble",
-      //         "price": 50,
-      //         "available": true,
-      //         "quantity":0
-      //       },
-      //       {
-      //         "name": "pudding",
-      //         "price": 50,
-      //         "available": true,
-      //         "quantity":0
-      //       }
-      //     ]
-      //   },
-      //   {
-      //     "name": "Tea",
-      //     "min": 1,
-      //     "max": 1,
-      //     "chosen":[],
-      //     "items": [
-      //       {
-      //         "name": "milk tea",
-      //         "price": 0,
-      //         "available": true,
-      //         "quantity":0
-      //       },
-      //       {
-      //         "name": "green milk tea",
-      //         "price": 0,
-      //         "available": true,
-      //         "quantity":0
-      //       }
-      //     ]
-      //   },
-      //   {
-      //     "name": "Size",
-      //     "min": 1,
-      //     "max": 1,
-      //     "chosen":[],
-      //     "items": [
-      //       {
-      //         "name": "Large",
-      //         "price": 0,
-      //         "available": true,
-      //         "quantity":0
-      //       },
-      //       {
-      //         "name": "Medium",
-      //         "price": 0,
-      //         "available": true,
-      //         "quantity":0
-      //       }
-      //     ]
-      //   }
-      // ]
-    // };
   }
   componentDidMount(){
     fetch("https://runkit.io/milkte/ricepo-interview-endpoint/branches/master/:rest_id/menu")
@@ -292,3 +227,69 @@ const styles = StyleSheet.create({
     paddingTop:4
   }
 });
+
+// "name": "Signature Milk Tea",
+// "price": 325,
+// "options": [
+//   {
+//     "name": "Add On",
+//     "min": 0,
+//     "max": 2,
+//     "chosen":[],
+//     "items": [
+//       {
+//         "name": "bubble",
+//         "price": 50,
+//         "available": true,
+//         "quantity":0
+//       },
+//       {
+//         "name": "pudding",
+//         "price": 50,
+//         "available": true,
+//         "quantity":0
+//       }
+//     ]
+//   },
+//   {
+//     "name": "Tea",
+//     "min": 1,
+//     "max": 1,
+//     "chosen":[],
+//     "items": [
+//       {
+//         "name": "milk tea",
+//         "price": 0,
+//         "available": true,
+//         "quantity":0
+//       },
+//       {
+//         "name": "green milk tea",
+//         "price": 0,
+//         "available": true,
+//         "quantity":0
+//       }
+//     ]
+//   },
+//   {
+//     "name": "Size",
+//     "min": 1,
+//     "max": 1,
+//     "chosen":[],
+//     "items": [
+//       {
+//         "name": "Large",
+//         "price": 0,
+//         "available": true,
+//         "quantity":0
+//       },
+//       {
+  //         "name": "Medium",
+  //         "price": 0,
+  //         "available": true,
+  //         "quantity":0
+  //       }
+  //     ]
+  //   }
+  // ]
+  // };
