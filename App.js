@@ -103,6 +103,16 @@ export default class App extends React.Component {
       let max = section.max;
       let { price, name, quantity } = item;
       let showPrice = (price/100).toFixed(2);
+      let quanCircle;
+      if(quantity){
+        quanCircle = (
+          <TouchableOpacity>
+            <View style={styles.itemQuan}>
+              <Text>{quantity}</Text>
+            </View>
+          </TouchableOpacity>
+        );
+      }
       if(item.available){
         return (
           <View style={styles.itemRow}>
@@ -113,11 +123,7 @@ export default class App extends React.Component {
                 <Text>+{showPrice}</Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity>
-              <View style={styles.itemQuan}>
-                <Text>{quantity}</Text>
-              </View>
-            </TouchableOpacity>
+            {quanCircle}
           </View>
         );
       }else{
@@ -204,7 +210,6 @@ const styles = StyleSheet.create({
     opacity:0.2
   },
   itemRow:{
-
   },
   itemQuan:{
     width:25,
