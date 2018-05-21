@@ -86,25 +86,27 @@ export default class App extends React.Component {
     return ()=>{
       let {options} = this.state;
       let index = findIndex(options,{"name":title});
-      let a = options[index];
+      let currentOption = options[index];
       let delta = -1;
-      let chosenArr = a.chosen;
+      let chosenArr = currentOption.chosen;
       let prevPrice = this.state.price;
+      //when operation is add, handle array/delta change
       if(operation === "add"){
         chosenArr.push(name);
+        //delete overflow chosen item, when no maxium quantity restrict(max = 0),will not trigger delete
         if(max && chosenArr.length > max){
           removedChoice = chosenArr.shift();
-          let subB = find(a.items,{name:removedChoice});
-          subB.quantity = subB.quantity - 1;
-          prevPrice = prevPrice - subB.price;
+          let subChoiceB = find(currentOption.items,{name:removedChoice});
+          subChoiceB.quantity = subChoiceB.quantity - 1;
+          prevPrice = prevPrice - subChoiceB.price;
         }
         delta = 1;
       }else{
         remove(chosenArr,(n)=> n === name);
       }
-      let subA = find(a.items,{name:name});
-      subA.quantity = subA.quantity + delta;
-      options[index] = a;
+      let subChoiceA = find(currentOption.items,{name:name});
+      subChoiceA.quantity = subChoiceA.quantity + delta;
+      options[index] = currentOption;
       let totalPrice = prevPrice + (addPrice * delta);
       this.setState({price:totalPrice,options:options});
     };
