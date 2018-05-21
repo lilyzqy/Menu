@@ -105,16 +105,18 @@ export default class App extends React.Component {
       let showPrice = (price/100).toFixed(2);
       if(item.available){
         return (
-          <View>
+          <View style={styles.itemRow}>
             <TouchableOpacity
             onPress={this._onPress(title,name,max,price)}>
               <View style={styles.itemList}>
-              <Text>{name}</Text>
-              <Text>+{showPrice}</Text>
+                <Text>{name}</Text>
+                <Text>+{showPrice}</Text>
               </View>
             </TouchableOpacity>
             <TouchableOpacity>
-              <Text>{quantity}</Text>
+              <View style={styles.itemQuan}>
+                <Text>{quantity}</Text>
+              </View>
             </TouchableOpacity>
           </View>
         );
@@ -193,10 +195,24 @@ const styles = StyleSheet.create({
     flexDirection:'row',
     justifyContent:'space-between',
     marginTop:20,
-    marginLeft:10,
-    marginRight:10
+    paddingLeft:10,
+    paddingRight:10,
+    alignItems:'stretch',
+    width:'100%',
   },
   unavailableItemList:{
     opacity:0.2
+  },
+  itemRow:{
+
+  },
+  itemQuan:{
+    width:25,
+    height:25,
+    borderRadius:20,
+    borderWidth: 0.7,
+    borderColor: 'black',
+    alignItems:'center',
+    paddingTop: 4
   }
 });
