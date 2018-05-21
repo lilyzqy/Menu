@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, StatusBar, SectionList, TouchableOpacity } from 'react-native';
-import { assign, find, findIndex }  from 'lodash';
+import { assign, find, findIndex, remove }  from 'lodash';
 
 export default class App extends React.Component {
   constructor(){
@@ -82,7 +82,7 @@ export default class App extends React.Component {
   // }
   
   
-  _onPress(title,name,max,addPrice){
+  _handleAddQuantity(title,name,max,addPrice){
     return ()=>{
       let {options} = this.state;
       let index = findIndex(options,{"name":title});
@@ -97,6 +97,21 @@ export default class App extends React.Component {
       console.log(this.state);
     };
   }
+  _handleMinusQuantity(title,name,addPrice){
+    return()=>{
+      let {options} = this.state;
+      let index = findIndex(options,{"name":title});
+      let a = options[index];
+      remove(a.chosen,(n)=> n === name);
+      let subA = find(a.items,{name:name});
+      subA.quantity = subA.quantity - 1;
+      options[index] = a;
+      let prevPrice = this.state.price;
+      let totalPrice = prevPrice - addPrice;
+      this.setState({price:totalPrice,options:options});
+      console.log(this.state);
+    }
+  }
   _renderItem(){
     return({item, section})=>{
       let title = section.title;
@@ -106,7 +121,8 @@ export default class App extends React.Component {
       let quanCircle;
       if(quantity){
         quanCircle = (
-          <TouchableOpacity>
+          <TouchableOpacity
+          onPress={this._handleMinusQuantity(title,name,price)}>
             <View style={styles.itemQuan}>
               <Text>{quantity}</Text>
             </View>
@@ -117,7 +133,7 @@ export default class App extends React.Component {
         return (
           <View style={styles.itemRow}>
             <TouchableOpacity
-            onPress={this._onPress(title,name,max,price)}>
+            onPress={this._handleAddQuantity(title,name,max,price)}>
               <View style={styles.itemList}>
                 <Text>{name}</Text>
                 <Text>+{showPrice}</Text>
