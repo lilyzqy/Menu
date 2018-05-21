@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, StatusBar, SectionList } from 'react-native';
+import { StyleSheet, Text, View, StatusBar, SectionList, TouchableOpacity } from 'react-native';
 
 export default class App extends React.Component {
   constructor(){
@@ -70,18 +70,29 @@ export default class App extends React.Component {
   //     console.log(this.state);
   //   });
   // }
+  _onPress(price){
+    return ()=>{
+      
+      console.log(price);
+    }
+  }
   _renderItem({item}){
     let price = (item.price/100).toFixed(2);
     return (
-      <View style={styles.itemList}>
-        <Text>{item.name}</Text>
-        <Text>+{price}</Text>
-      </View>);
+      <TouchableOpacity
+      onPress={this._onPress(price)}>
+        <View style={styles.itemList}>
+          <Text>{item.name}</Text>
+          <Text>+{price}</Text>
+        </View>
+      </TouchableOpacity>
+    );
   }
   render() {
     let price = this.state.price/100;
-    let choices = this.state.options.map((option)=>{return {title:option.name,data:option.items}});
-    console.log(choices);
+    let choices = this.state.options.map((option)=>{
+      return {title:option.name,data:option.items}
+    });
     return (
       <View style={styles.container}>
         <StatusBar hidden={true} />
@@ -92,7 +103,7 @@ export default class App extends React.Component {
         <View style={styles.sectionList}>
           <SectionList
           sections={choices}
-          renderItem={this._renderItem}
+          renderItem={this._renderItem.bind(this)}
           renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>Choose {section.title}</Text>}
           keyExtractor={(item, index) => index}
           />
@@ -144,6 +155,7 @@ const styles = StyleSheet.create({
     flexDirection:'row',
     justifyContent:'space-between',
     marginTop:20,
-    marginLeft:5
+    marginLeft:10,
+    marginRight:10
   }
 });
