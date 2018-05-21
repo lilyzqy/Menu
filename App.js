@@ -88,16 +88,23 @@ export default class App extends React.Component {
       let index = findIndex(options,{"name":title});
       let a = options[index];
       let delta = -1;
+      let chosenArr = a.chosen;
+      let prevPrice = this.state.price;
       if(operation === "add"){
-        a.chosen.push(name);
+        chosenArr.push(name);
+        if(max && chosenArr.length > max){
+          removedChoice = chosenArr.shift();
+          let subB = find(a.items,{name:removedChoice});
+          subB.quantity = subB.quantity - 1;
+          prevPrice = prevPrice - subB.price;
+        }
         delta = 1;
       }else{
-        remove(a.chosen,(n)=> n === name);
+        remove(chosenArr,(n)=> n === name);
       }
       let subA = find(a.items,{name:name});
       subA.quantity = subA.quantity + delta;
       options[index] = a;
-      let prevPrice = this.state.price;
       let totalPrice = prevPrice + (addPrice * delta);
       this.setState({price:totalPrice,options:options});
     };
