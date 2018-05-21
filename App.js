@@ -118,25 +118,25 @@ export default class App extends React.Component {
       let { price, name, quantity } = item;
       let showPrice = (price/100).toFixed(2);
       let quanCircle;
+      //hide quantity if 0, prevent from quantity going below 0
       if(quantity){
         quanCircle = (
           <TouchableOpacity
+          style={styles.itemQuan}
           onPress={this._handleQuantity("minus",title,name,price)}>
-            <View style={styles.itemQuan}>
-              <Text>{quantity}</Text>
-            </View>
+            <Text style={styles.quanNumber}>{quantity}</Text>
           </TouchableOpacity>
         );
       }
+      //set item unclickable when not available
       if(item.available){
         return (
           <View style={styles.itemRow}>
             <TouchableOpacity
+            style={styles.itemList}
             onPress={this._handleQuantity("add",title,name,price,max)}>
-              <View style={styles.itemList}>
-                <Text>{name}</Text>
-                <Text>+{showPrice}</Text>
-              </View>
+              <Text>{name}</Text>
+              <Text>+{showPrice}</Text>
             </TouchableOpacity>
             {quanCircle}
           </View>
@@ -151,6 +151,7 @@ export default class App extends React.Component {
   }
   render() {
     let price = this.state.price/100;
+    //pretreat options for sectionList
     let choices = this.state.options.map((option)=>{
       return {title:option.name, data:option.items, max:option.max};
     });
@@ -159,7 +160,9 @@ export default class App extends React.Component {
         <StatusBar hidden={true} />
         <View style={styles.header}>
           <Text style={styles.name}>{this.state.name}</Text>
-          <Text style={styles.price}>{price}</Text>
+          <TouchableOpacity style={styles.price}>
+            <Text>{price}</Text>
+          </TouchableOpacity>
         </View>
         <View style={styles.sectionList}>
           <SectionList
@@ -225,6 +228,7 @@ const styles = StyleSheet.create({
     opacity:0.2
   },
   itemRow:{
+    flexDirection:'row'
   },
   itemQuan:{
     width:25,
@@ -233,6 +237,9 @@ const styles = StyleSheet.create({
     borderWidth: 0.7,
     borderColor: 'black',
     alignItems:'center',
-    paddingTop: 4
+    marginTop: 14
+  },
+  quanNumber:{
+    paddingTop:4
   }
 });
