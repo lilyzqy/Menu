@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, StatusBar, SectionList, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, StatusBar, SectionList, TouchableOpacity, Alert } from 'react-native';
 import { assign, find, findIndex, remove }  from 'lodash';
 
 export default class App extends React.Component {
@@ -80,7 +80,42 @@ export default class App extends React.Component {
   //     console.log(this.state);
   //   });
   // }
-  
+  _handleSubmitCheck(){
+    return()=>{
+      let { options, name } = this.state;
+      let alert = "";
+      let order = `${name} with \n`;
+      options.forEach((option)=>{
+        let { min, chosen} = option;
+        let itemName = option.name;
+        if(min && chosen.length < min){
+          alert += `Please at least choose ${min} ${itemName} \n`;
+        }else{
+          items = chosen.join(" ");
+          order += `${itemName}: ${items} \n`;
+        }
+      });
+      if(alert){
+        Alert.alert(
+          'Hi Dear',
+          alert,
+          [
+            {text: 'OK', onPress: () => console.log('OK Pressed')},
+          ],
+          { cancelable: false }
+        );
+      }else{
+        Alert.alert(
+          'Your Order',
+          order,
+          [
+            {text: 'Confirm', onPress: () => console.log('OK Pressed')},
+            {text: 'Modify', onPress: () => console.log('Modify Pressed')},
+          ]
+        )
+      }
+    }
+  }
   
   _handleQuantity(operation,title,name,addPrice,max){
     return ()=>{
@@ -160,7 +195,9 @@ export default class App extends React.Component {
         <StatusBar hidden={true} />
         <View style={styles.header}>
           <Text style={styles.name}>{this.state.name}</Text>
-          <TouchableOpacity style={styles.price}>
+          <TouchableOpacity 
+          style={styles.price}
+          onPress={this._handleSubmitCheck()}>
             <Text>{price}</Text>
           </TouchableOpacity>
         </View>
