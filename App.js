@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, StatusBar, SectionList, TouchableOpacity } from 'react-native';
+import  assign  from 'lodash/assign';
 
 export default class App extends React.Component {
   constructor(){
@@ -33,12 +34,12 @@ export default class App extends React.Component {
             {
               "name": "milk tea",
               "price": 0,
-              "avilable": true
+              "available": true
             },
             {
               "name": "green milk tea",
               "price": 0,
-              "avilable": true
+              "available": true
             }
           ]
         },
@@ -50,12 +51,12 @@ export default class App extends React.Component {
             {
               "name": "Large",
               "price": 0,
-              "avilable": true
+              "available": true
             },
             {
               "name": "Medium",
               "price": 0,
-              "avilable": true
+              "available": false
             }
           ]
         }
@@ -78,17 +79,26 @@ export default class App extends React.Component {
     }
   }
   _renderItem({item}){
-    let price = item.price
+    console.log(item);
+    let price = item.price;
     let showPrice = (price/100).toFixed(2);
-    return (
-      <TouchableOpacity
-      onPress={this._onPress(price)}>
+    if(item.available){
+      return (
+        <TouchableOpacity
+        onPress={this._onPress(price)}>
         <View style={styles.itemList}>
-          <Text>{item.name}</Text>
-          <Text>+{showPrice}</Text>
+        <Text>{item.name}</Text>
+        <Text>+{showPrice}</Text>
         </View>
-      </TouchableOpacity>
-    );
+        </TouchableOpacity>
+      );
+    }else{
+      console.log(styles.unavailableItemList);
+      return(<View style={styles.unavailableItemList}>
+      <Text>{item.name}</Text>
+      <Text>+{showPrice}</Text>
+      </View>)
+    }
   }
   render() {
     let price = this.state.price/100;
@@ -159,5 +169,14 @@ const styles = StyleSheet.create({
     marginTop:20,
     marginLeft:10,
     marginRight:10
+  },
+  unavailableItemList:{
+    flex:1,
+    flexDirection:'row',
+    justifyContent:'space-between',
+    marginTop:20,
+    marginLeft:10,
+    marginRight:10,
+    opacity:0.2
   }
 });
