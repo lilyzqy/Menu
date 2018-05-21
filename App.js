@@ -82,35 +82,25 @@ export default class App extends React.Component {
   // }
   
   
-  _handleAddQuantity(title,name,max,addPrice){
+  _handleQuantity(operation,title,name,addPrice,max){
     return ()=>{
       let {options} = this.state;
       let index = findIndex(options,{"name":title});
       let a = options[index];
-      a.chosen.push(name);
+      let delta = -1;
+      if(operation === "add"){
+        a.chosen.push(name);
+        delta = 1;
+      }else{
+        remove(a.chosen,(n)=> n === name);
+      }
       let subA = find(a.items,{name:name});
-      subA.quantity = subA.quantity + 1;
+      subA.quantity = subA.quantity + delta;
       options[index] = a;
       let prevPrice = this.state.price;
-      let totalPrice = prevPrice + addPrice;
+      let totalPrice = prevPrice + (addPrice * delta);
       this.setState({price:totalPrice,options:options});
-      console.log(this.state);
     };
-  }
-  _handleMinusQuantity(title,name,addPrice){
-    return()=>{
-      let {options} = this.state;
-      let index = findIndex(options,{"name":title});
-      let a = options[index];
-      remove(a.chosen,(n)=> n === name);
-      let subA = find(a.items,{name:name});
-      subA.quantity = subA.quantity - 1;
-      options[index] = a;
-      let prevPrice = this.state.price;
-      let totalPrice = prevPrice - addPrice;
-      this.setState({price:totalPrice,options:options});
-      console.log(this.state);
-    }
   }
   _renderItem(){
     return({item, section})=>{
@@ -122,7 +112,7 @@ export default class App extends React.Component {
       if(quantity){
         quanCircle = (
           <TouchableOpacity
-          onPress={this._handleMinusQuantity(title,name,price)}>
+          onPress={this._handleQuantity("minus",title,name,price)}>
             <View style={styles.itemQuan}>
               <Text>{quantity}</Text>
             </View>
@@ -133,7 +123,7 @@ export default class App extends React.Component {
         return (
           <View style={styles.itemRow}>
             <TouchableOpacity
-            onPress={this._handleAddQuantity(title,name,max,price)}>
+            onPress={this._handleQuantity("add",title,name,price,max)}>
               <View style={styles.itemList}>
                 <Text>{name}</Text>
                 <Text>+{showPrice}</Text>
