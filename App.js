@@ -73,10 +73,9 @@ export default class App extends React.Component {
     // };
   }
   componentDidMount(){
-    fetch("https://runkit.io/milkte/ricepo-interview-endpoint/branches/master/:rest_id/menu",{method:'GET'})
+    fetch("https://runkit.io/milkte/ricepo-interview-endpoint/branches/master/:rest_id/menu")
     .then((res)=> res.json())
     .then((data)=>{
-      console.log(data);
       data.options.forEach((option)=>{
         option.chosen = [];
         option.items.forEach((item)=>{
@@ -84,7 +83,6 @@ export default class App extends React.Component {
         });
       });
       this.setState(data);
-      console.log(this.state);
     });
   }
   _handleSubmitCheck(){
@@ -95,6 +93,7 @@ export default class App extends React.Component {
       options.forEach((option)=>{
         let { min, chosen} = option;
         let itemName = option.name;
+        //add to alert if not meeting requiring min 
         if(min && chosen.length < min){
           alert += `Please at least choose ${min} ${itemName} \n`;
         }else{
@@ -102,15 +101,16 @@ export default class App extends React.Component {
           order += `${itemName}: ${items} \n`;
         }
       });
+      //alert will hold alert message if any of items not meeting requiring min
       if(alert){
         Alert.alert(
           'Hi Dear',
           alert,
           [
             {text: 'OK', onPress: () => console.log('OK Pressed')},
-          ],
-          { cancelable: false }
+          ]
         );
+        //passed check, ready to place order
       }else{
         Alert.alert(
           'Your Order',
@@ -221,7 +221,7 @@ export default class App extends React.Component {
         </View>
       );
     }else{
-      return(<View>No data</View>)
+      return(<View>No data</View>);
     }
   }
 }
