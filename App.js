@@ -64,13 +64,27 @@ export default class App extends React.Component {
       let {options} = this.state;
       let index = findIndex(options,{"name":title});
       let currentOption = options[index];
-      let delta = -1;
       let chosenArr = currentOption.chosen;
+      let adjustQuanAndState = (delta)=>{
+        //find clicked subitem in options
+        let subChoiceA = find(currentOption.items,{name:name});
+        //add quantity to this item
+        subChoiceA.quantity = subChoiceA.quantity + delta;
+        //update options with changed item
+        options[index] = currentOption;
+        //adjust price
+        let totalPrice = prevPrice + (addPrice * delta);
+        //change state with the new info
+        this.setState({price:totalPrice,options:options});
+      };
       let prevPrice = this.state.price;
       //when operation is add, handle array/delta change
       if(operation === "add"){
-        //delete overflow chosen item, when no maxium quantity restrict(max = 0),will not trigger delete
-        if(max && chosenArr.length >= max){
+        // when max not reached or no max
+        if(!max || chosenArr.length < max){
+          chosenArr.push(name);
+          adjustQuanAndState(1);
+        }else{//when reach max
           for(let i = 0; i < chosenArr.length; i++){
             let a = chosenArr[i];
             if(chosenArr[i]===name){
@@ -83,16 +97,7 @@ export default class App extends React.Component {
               //adjust price
               prevPrice = prevPrice - subChoiceB.price;
               chosenArr.push(name);
-              //find clicked subitem in options
-              let subChoiceA = find(currentOption.items,{name:name});
-              //add quantity to this item
-              subChoiceA.quantity = subChoiceA.quantity + 1;
-              //update options with changed item
-              options[index] = currentOption;
-              //adjust price
-              let totalPrice = prevPrice + addPrice;
-              //change state with the new info
-              this.setState({price:totalPrice,options:options});
+              adjustQuanAndState(1);
               return;
             }
           }
@@ -104,32 +109,11 @@ export default class App extends React.Component {
             ]
           );
           return;
-        }else{
-          chosenArr.push(name);
-          //find clicked subitem in options
-          let subChoiceA = find(currentOption.items,{name:name});
-          //add quantity to this item
-          subChoiceA.quantity = subChoiceA.quantity + 1;
-          //update options with changed item
-          options[index] = currentOption;
-          //adjust price
-          let totalPrice = prevPrice + addPrice;
-          //change state with the new info
-          this.setState({price:totalPrice,options:options});
         }
       }else{
         //remove clicked subitem from chosenArr
         remove(chosenArr,(n)=> n === name);
-        //find clicked subitem in options
-        let subChoiceA = find(currentOption.items,{name:name});
-        //minus quantity to this item
-        subChoiceA.quantity = subChoiceA.quantity - 1;
-        //update options with changed item
-        options[index] = currentOption;
-        //adjust price
-        let totalPrice = prevPrice + (addPrice * -1);
-        //change state with the new info
-        this.setState({price:totalPrice,options:options});
+        adjustQuanAndState(-1);
       }
     };
   }
